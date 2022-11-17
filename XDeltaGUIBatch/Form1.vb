@@ -124,7 +124,7 @@ Public Class Form1
         End If
 
         If File.Exists("xdelta.exe") = False Then
-            MessageBox.Show("Unablet to lcoated xdelta.exe in root dir. Please add and try again")
+            MessageBox.Show("Unable to lcoated xdelta.exe in root dir. Please add and try again")
             Exit Sub
         End If
 
@@ -139,12 +139,12 @@ Public Class Form1
                     File.Delete(OutputXDelta)
                 End If
                 Process.Start(xdapp, argu)
-                Thread.Sleep(50)
+                Thread.Sleep(500)
                 If File.Exists(OutputXDelta) Then
                     lbxBatchCreatePatchLog.Items.Add("Created Patch: " & f)
                     PatchCreateCount = PatchCreateCount + 1
                 Else
-                    MessageBox.Show("Failed to create Patch")
+                    lbxBatchCreatePatchLog.Items.Add("failed to create Patch: " & f)
                 End If
             Else
                 SkippedPatches.Add(f)
@@ -199,6 +199,11 @@ Public Class Form1
             Directory.CreateDirectory(OutputFolder)
         End If
 
+        If File.Exists("xdelta.exe") = False Then
+            MessageBox.Show("Unable to lcoated xdelta.exe in root dir. Please add and try again")
+            Exit Sub
+        End If
+
 
         For Each f In XDeltaPatchFiles
             Dim CheckFile = Path.GetFileNameWithoutExtension(f)
@@ -215,12 +220,12 @@ Public Class Form1
                 End If
 
                 Process.Start(xdapp, argu)
-                Thread.Sleep(50)
+                Thread.Sleep(500)
                 If File.Exists(OutputFile) Then
                     lbxBatchPatchLog.Items.Add("Patched " & CheckFile)
                     PatchCount = PatchCount + 1
                 Else
-                    MessageBox.Show("Failed to create Patch")
+                    lbxBatchPatchLog.Items.Add("Failed to create Patch: " & CheckFile)
                 End If
             End If
         Next
@@ -250,16 +255,20 @@ Public Class Form1
         If Directory.Exists("Built_Files") = False Then
             Directory.CreateDirectory("Built_Files")
         End If
+        If File.Exists("xdelta.exe") = False Then
+            MessageBox.Show("Unable to lcoated xdelta.exe in root dir. Please add and try again")
+            Exit Sub
+        End If
 
         Dim OutputFile = "Built_Files\" & Path.GetFileName(SingleOrignalFile)
         Dim xdapp = "xdelta.exe"
         Dim argu = "-d -s """ & SingleOrignalFile & """ """ & SingleXDeltaPatch & """ """ & OutputFile & """"
         Process.Start(xdapp, argu)
-        Thread.Sleep(50)
+        Thread.Sleep(500)
         If File.Exists(OutputFile) Then
             lbxSinglePatchFileLog.Items.Add("Created Patched File: " & OutputFile)
         Else
-            MessageBox.Show("Failed to patch file")
+            lbxSinglePatchFileLog.Items.Add("Failed to Create XDelta Patch: " & OutputFile)
         End If
     End Sub
 
@@ -282,16 +291,20 @@ Public Class Form1
         If Directory.Exists("Created_Patches") = False Then
             Directory.CreateDirectory("Created_Patches")
         End If
+        If File.Exists("xdelta.exe") = False Then
+            MessageBox.Show("Unable to lcoated xdelta.exe in root dir. Please add and try again")
+            Exit Sub
+        End If
 
         Dim OutputXDelta = "Created_Patches\" & Path.GetFileName(SingleModifiedFile) & ".xdelta"
         Dim xdapp = "xdelta.exe"
         Dim argu = "-e -s """ & SingleOrignalFile & """ """ & SingleModifiedFile & """ """ & OutputXDelta & """"
         Process.Start(xdapp, argu)
-        Thread.Sleep(50)
+        Thread.Sleep(500)
         If File.Exists(OutputXDelta) Then
             lbxSinglePatchFileLog.Items.Add("Created Patch: " & OutputXDelta)
         Else
-            MessageBox.Show("Failed to create Patch")
+            lbxSinglePatchFileLog.Items.Add("Failed to create Patch: " & OutputXDelta)
         End If
     End Sub
 End Class
