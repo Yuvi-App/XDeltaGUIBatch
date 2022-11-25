@@ -12,6 +12,6 @@ Create - Create a singular XDELTA Patch from one file. (use this to create .xdel
 
 Batch Patch - Allows you patch many files at once from many .xdelta patch files
 
-Batch Creat - Allows you to create many .xdelta patch at once.
+Batch Create - Allows you to create many .xdelta patch at once.
 
 ![image](https://s3.yuvi.app/images/xdeltabatch.png)
