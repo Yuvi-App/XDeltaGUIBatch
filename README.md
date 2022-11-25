@@ -7,8 +7,11 @@ Other then that is can still do single file patch as well to make it the go to t
 Functions
 
 Patch - Allows you to take 1 xdelta patch and patch a single file (use this if you are given a .xdelta file)
+
 Create - Create a singular XDELTA Patch from one file. (use this to create .xdelta files)
+
 Batch Patch - Allows you patch many files at once from many .xdelta patch files
+
 Batch Creat - Allows you to create many .xdelta patch at once.
 
 ![image](https://s3.yuvi.app/images/xdeltabatch.png)
