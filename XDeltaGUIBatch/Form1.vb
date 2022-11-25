@@ -248,10 +248,48 @@ Public Class Form1
         If ofdSingleModifiedFile.ShowDialog = DialogResult.OK Then
             SingleModifiedFile = ofdSingleModifiedFile.FileName
             lbxSingleCreatePatchLog.Items.Add("Modified File: " & SingleModifiedFile)
+            btnCreatePatch.Enabled = True
         End If
     End Sub
 
     Private Sub btnCreatePatch_Click(sender As Object, e As EventArgs) Handles btnCreatePatch.Click
+        If Directory.Exists("Created_Patches") = False Then
+            Directory.CreateDirectory("Created_Patches")
+        End If
+        If File.Exists("xdelta.exe") = False Then
+            MessageBox.Show("Unable to lcoated xdelta.exe in root dir. Please add and try again")
+            Exit Sub
+        End If
+
+        Dim OutputXDelta = "Created_Patches\" & Path.GetFileName(SingleModifiedFile) & ".xdelta"
+        Dim xdapp = "xdelta.exe"
+        Dim argu = "-e -s """ & SingleOrignalFile & """ """ & SingleModifiedFile & """ """ & OutputXDelta & """"
+        Process.Start(xdapp, argu)
+        Thread.Sleep(500)
+        If File.Exists(OutputXDelta) Then
+            lbxSingleCreatePatchLog.Items.Add("Created Patch: " & OutputXDelta)
+        Else
+            lbxSingleCreatePatchLog.Items.Add("Failed to create Patch: " & OutputXDelta)
+        End If
+    End Sub
+
+    ''Single Patch Function
+    Private Sub btnSelectOrignalPatch_Click(sender As Object, e As EventArgs) Handles btnSelectOrignalPatch.Click
+        If ofdSingleOriginalFile.ShowDialog = DialogResult.OK Then
+            SingleOrignalFile = ofdSingleOriginalFile.FileName
+            lbxSinglePatchFileLog.Items.Add("Original File: " & SingleOrignalFile)
+        End If
+    End Sub
+
+    Private Sub btnSelectXDeltaPatch_Click(sender As Object, e As EventArgs) Handles btnSelectXDeltaPatch.Click
+        If ofdSingleXDeltaPatch.ShowDialog = DialogResult.OK Then
+            SingleXDeltaPatch = ofdSingleXDeltaPatch.FileName
+            lbxSinglePatchFileLog.Items.Add("XDelta Patch: " & SingleXDeltaPatch)
+            btnSinglePatchFile.Enabled = True
+        End If
+    End Sub
+
+    Private Sub btnSinglePatchFile_Click(sender As Object, e As EventArgs) Handles btnSinglePatchFile.Click
         If Directory.Exists("Built_Files") = False Then
             Directory.CreateDirectory("Built_Files")
         End If
@@ -269,42 +307,6 @@ Public Class Form1
             lbxSinglePatchFileLog.Items.Add("Created Patched File: " & OutputFile)
         Else
             lbxSinglePatchFileLog.Items.Add("Failed to Create XDelta Patch: " & OutputFile)
-        End If
-    End Sub
-
-    ''Single Patch Function
-    Private Sub btnSelectOrignalPatch_Click(sender As Object, e As EventArgs) Handles btnSelectOrignalPatch.Click
-        If ofdSingleOriginalFile.ShowDialog = DialogResult.OK Then
-            SingleOrignalFile = ofdSingleOriginalFile.FileName
-            lbxSinglePatchFileLog.Items.Add("Original File: " & SingleOrignalFile)
-        End If
-    End Sub
-
-    Private Sub btnSelectXDeltaPatch_Click(sender As Object, e As EventArgs) Handles btnSelectXDeltaPatch.Click
-        If ofdSingleXDeltaPatch.ShowDialog = DialogResult.OK Then
-            SingleXDeltaPatch = ofdSingleXDeltaPatch.FileName
-            lbxSinglePatchFileLog.Items.Add("XDelta Patch: " & SingleXDeltaPatch)
-        End If
-    End Sub
-
-    Private Sub btnSinglePatchFile_Click(sender As Object, e As EventArgs) Handles btnSinglePatchFile.Click
-        If Directory.Exists("Created_Patches") = False Then
-            Directory.CreateDirectory("Created_Patches")
-        End If
-        If File.Exists("xdelta.exe") = False Then
-            MessageBox.Show("Unable to lcoated xdelta.exe in root dir. Please add and try again")
-            Exit Sub
-        End If
-
-        Dim OutputXDelta = "Created_Patches\" & Path.GetFileName(SingleModifiedFile) & ".xdelta"
-        Dim xdapp = "xdelta.exe"
-        Dim argu = "-e -s """ & SingleOrignalFile & """ """ & SingleModifiedFile & """ """ & OutputXDelta & """"
-        Process.Start(xdapp, argu)
-        Thread.Sleep(500)
-        If File.Exists(OutputXDelta) Then
-            lbxSinglePatchFileLog.Items.Add("Created Patch: " & OutputXDelta)
-        Else
-            lbxSinglePatchFileLog.Items.Add("Failed to create Patch: " & OutputXDelta)
         End If
     End Sub
 End Class
